@@ -6,6 +6,7 @@ import HomePage from '../pages/home/HomePage';
 import OAuthRedirectHandler from '../component/login/OAuthRedirectHandler';
 import NotFoundPage from '../pages/error/NotFoundPage';
 import UnauthorizedPage from '../pages/error/UnauthorizedPage';
+import Owner from './Owner';
 
 
 const User = () => {
@@ -15,6 +16,8 @@ const User = () => {
             <Route path='/register' element={<RegisterPage/>}/>
             <Route path='/' element={<HomePage/>}/>
             <Route path='/oauth2/redirect' element={<OAuthRedirectHandler/>}/>
+
+            <Route path='/dashboard/*' element={<Owner/>} />
 
             <Route path='/404'element={<NotFoundPage/>} />
             <Route path='/401'element={<UnauthorizedPage/>} />

@@ -26,11 +26,16 @@ const RegisterPage = () => {
       navigate("/");
     }
     
-  }, []);
+  }, [navigate, currentUser]);
 
+  let regName: RegExp = /^[a-zA-Z]+$/;
+  let regMob: RegExp = /^([+]\d{2})?\d{10}$/;
   const formSchema = z
     .object({
-      email: z.string().email("Invalid email").min(1, "Email is required"),
+      email: z
+        .string()
+        .email("Invalid email")
+        .min(1, "Email is required"),
       password: z
         .string()
         .min(1, "Password is required")
@@ -38,10 +43,15 @@ const RegisterPage = () => {
       confirmPassword: z.string().min(1, "Password confirmation is required"),
       name: z
         .string()
+        .regex(regName, "Please provide valid Name.")
         .min(1, "Name required")
         .min(3, "Name must have min 3 characters"),
-      phone: z.string().min(10, "Phone number is not valid"),
-      terms: z.literal(true, {
+      phone: z
+        .string()
+        .regex(regMob, "Please provide valid Phone Number (10 digits).")
+        .min(10, "Phone number is not valid"),
+      terms: z
+        .literal(true, {
         errorMap: () => ({
           message: "You must accept the terms and conditions",
         }),
@@ -125,7 +135,7 @@ const RegisterPage = () => {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none" +
                     (errors.email
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")

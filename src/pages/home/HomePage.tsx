@@ -1,8 +1,13 @@
-import React from 'react'
+import HomeNav from "../../component/common/HomeNav"
 
-const HomePage = () => {
+
+const HomePage = () => {  
+
+
   return (
-    <div>HomePage</div>
+   <div>
+    <HomeNav/>
+   </div>
   )
 }
 
