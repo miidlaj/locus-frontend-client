@@ -10,6 +10,7 @@ const OAuthRedirectHandler = () => {
     email: string;
     name: string;
     phone: string;
+    id: string;
 
 }
 
@@ -18,7 +19,9 @@ const OAuthRedirectHandler = () => {
     const name = new URLSearchParams(search).get('name');
     const phone = new URLSearchParams(search).get('phone');
     const email = new URLSearchParams(search).get('email');
+    const id = new URLSearchParams(search).get('id');
 
+  
     const error = new URLSearchParams(search).get('error');
 
     const dispatch = useDispatch();
@@ -28,7 +31,8 @@ const OAuthRedirectHandler = () => {
       jwtToken: jwtToken? jwtToken : "",
       email: email? email : "",
       name: name? name : "",
-      phone: phone? phone : ""
+      phone: phone? phone : "",
+      id: id? id : "",
     }
     
     console.log("here");

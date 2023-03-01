@@ -5,7 +5,7 @@ interface UserType {
     email: string;
     name: string;
     phone: string;
-
+    id: string;
 }
 
 export const setCurrentUser = (user: UserType) => {

@@ -1,5 +1,7 @@
 export const BASE_API_URL = "http://localhost:9090";
 
+export const RESORT_SERVICE = "http://localhost:9001";
+
 export const ACCESS_TOKEN = 'accessToken';
 
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'

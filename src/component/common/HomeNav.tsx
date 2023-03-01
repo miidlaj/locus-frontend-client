@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './tailwindcss.css'
-import { Dropdown } from "flowbite";
-import type { DropdownOptions, DropdownInterface } from "flowbite";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { NavLink }from 'react-router-dom'
@@ -21,22 +19,8 @@ useEffect(() => {
 
     const $triggerEl = buttonRef.current;
 
-const options: DropdownOptions = {
-    placement: 'bottom',
-    triggerType: 'click',
-    offsetSkidding: 0,
-    offsetDistance: 10,
-    delay: 300,
-  };
-  
-  const dropdown: DropdownInterface = new Dropdown($targetEl, $triggerEl, options);
-   
     
-  if (dropDownProfile) {
-    dropdown.show();
-  }else{
-    dropdown.hide();
-  }
+ 
 
 }, [dropDownProfile])
 
