@@ -13,7 +13,7 @@ interface PersonalDetailsProps {
 const Overview = (props: PersonalDetailsProps) => {
   const { resortName, handleChange, nextStep } = props;
 
-  let regName: RegExp = /^[a-zA-Z]+$/;
+  let regName: RegExp = /^[a-zA-Z ]+$/;
   const formSchema = z.object({
     resortName: z
       .string()
@@ -42,7 +42,7 @@ const Overview = (props: PersonalDetailsProps) => {
 
   return (
     <>
-      <div className="sm:pt-32">
+      <div className="sm:pt-32 duration-300">
         <div className="text-sm font-bold text-gray-700 tracking-wide">
           Resort Name
         </div>

@@ -65,7 +65,7 @@ const FacilitySelection = (props: Props) => {
   }, []);
 
   return (
-    <div className="sm:pt-24">
+    <div className="sm:pt-24 duration-300">
       <div className="text-sm font-bold text-gray-700 tracking-wide">
         Facilities
       </div>

@@ -53,7 +53,7 @@ const Description = (props: Props) => {
 
   return (
     <>
-      <div className="sm:pt-10">
+      <div className="sm:pt-10 duration-300">
         <div className="">
           <div className="text-sm font-bold text-gray-700 tracking-wide">
             Category

@@ -1,6 +1,8 @@
 import React from "react";
 import "./ImageUpload.css";
-import Modal from "@mui/material/Modal";
+
+import Modal from "../../../common/Modal";
+
 import Box from "@mui/material/Box";
 import ImageCrop from "./ImageCrop";
 import imageCompression from "browser-image-compression";
@@ -9,6 +11,8 @@ import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import ResortImageService from "../../../../services/resort/image.service";
+import { useLocation, useNavigate } from "react-router-dom";
+import AlertBox from "../../../common/AlertBox";
 
 const style = {
   position: "absolute" as "absolute",
@@ -29,6 +33,21 @@ const ResortImages = () => {
   const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
   const [uploading, setUploading] = React.useState(false);
 
+  // Count for uploaded Images
+  const [uploadedCount, setUploadedCount] = React.useState(0);
+
+  let location = useLocation();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!location?.state?.success || location?.state?.success === undefined) {
+      navigate("/dashboard/resorts/new/0");
+    }
+  }, []);
+
+  const resortData = location?.state?.resort;
+  const resortId = resortData?.id;
+
   type alertType = {
     show: boolean;
     message: string;
@@ -48,10 +67,10 @@ const ResortImages = () => {
   ) => {
     if (selectedImages.length > 11) {
       setAlert({
-        message:"Cannot upload more than 10 Extra Images",
+        message: "Cannot upload more than 10 Extra Images",
         type: "warning",
-        show: true
-      })
+        show: true,
+      });
       return;
     }
     const selectedFiles = event.target.files;
@@ -97,11 +116,9 @@ const ResortImages = () => {
           type: "error",
           show: true,
         });
-        console.log(error);
       }
     } else {
       setOpenImageModal(true);
-      console.log(imageFile);
 
       setImageWantToBeCropped(URL.createObjectURL(imageFile));
     }
@@ -127,69 +144,68 @@ const ResortImages = () => {
     setSelectedImages([]);
   };
 
-  const uploadHandler = () => {
-    if (selectedImages.length > 11) {
+  const uploadHandler = async () => {
+    if (selectedImages.length >= 11) {
       setAlert({
-        message:"Cannot upload more than 10 Extra Images",
+        message: "Cannot upload more than 10 Extra Images",
         type: "warning",
-        show: true
-      })
+        show: true,
+      });
       return;
     }
+    if (selectedImages.length < 2) {
+      setAlert({
+        message: "Atleast select a default Image and an extra Image",
+        type: "warning",
+        show: true,
+      });
+      return;
+    }
+    setUploading(true);
 
-    setUploading(true);    
-    selectedImages.forEach((image, index) => {
+    selectedImages.forEach(async (image, index) => {
       const formData = new FormData();
-      index++;
-      fetch(image)
+      console.log(index);
+
+      await fetch(image)
         .then((response) => response.blob())
-        .then((blob) => {
-          if (index === 1) {
+        .then(async (blob) => {
+          if (index + 1 === 1) {
+            
             const file = new File([blob], index.toString(), {
               type: blob.type,
             });
             formData.append("image", file);
-            formData.append("resortId", "1");
-            sendDefaultImageRequest(formData);
+            formData.append("resortId", resortId);
+            await sendDefaultImageRequest(formData);
           } else {
             const file = new File([blob], index.toString(), {
               type: blob.type,
             });
             formData.append("image", file);
-            formData.append("resortId", "1");
-            ResortImageService.setExtraImage(formData)
-              .then((response) => {
-                console.log(response.data);
+            formData.append("resortId", resortId);
+            await ResortImageService.setExtraImage(formData)
+              .then(async (response) => {
                 if (response.status === 200) {
-                  setAlert({
-                    message: index + "Image uploaded Successfully",
-                    type: "success",
-                    show: true,
-                  });
+                  setUploadedCount(index + 1); 
                 }
               })
               .catch((error) => {
-                console.log(error);
-
                 setAlert({
-                  message: error.toString(),
+                  message: error.response.data.toString(),
                   type: "error",
                   show: true,
                 });
               });
-
-
           }
         })
         .catch((error) => {
           setAlert({
-            message: error.toString(),
+            message: error.message.toString(),
             type: "error",
             show: true,
           });
-          console.error(error);
         });
-      // convertBlobLinkToFile(image, index.toString())
       //   .then((file) => {
       //     if (index === 0) {
       //       formData.append("image", file);
@@ -205,66 +221,86 @@ const ResortImages = () => {
       //     });
       //   });
     });
+
+    setTimeout(() => {
+      console.log("Closing modal...");
+      setUploading(false);
+    }, 50000);
+    setAlert({
+      message: uploadedCount + " Images Uplaoded Successfully",
+      type: "success",
+      show: true,
+    });
+
+    setTimeout(navigateToNextPage , 10000);
   };
 
-  const sendDefaultImageRequest = (formData: FormData) => {
+  const navigateToNextPage = () => {
+    navigate("/dashboard/resorts/new/2", {
+      state: {
+        success: true,
+        resort: resortId,
+      }});
+  }
+  
+
+  const sendDefaultImageRequest = async (formData: FormData) => {
     ResortImageService.setDefaultImage(formData)
       .then((response) => {
-        console.log(response.data);
         if (response.status === 200) {
-          setAlert({
-            message: " Image uploaded Successfully",
-            type: "success",
-            show: true,
-          });
+          setUploadedCount(1);
         }
       })
       .catch((error) => {
-        console.log(error);
-
         setAlert({
-          message: error.toString(),
+          message: error.response.data.toString(),
           type: "error",
           show: true,
         });
+        if (error?.response?.status === 404) {
+          setTimeout(() => {
+            navigate("/dashboard/resorts/new/1", {
+              state: {
+                success: false,
+                resort: null,
+              },
+            });
+          }, 3000);
+        }
       });
   };
 
-  async function convertBlobLinkToFile(
-    blobLink: string,
-    filename: string
-  ): Promise<File> {
-    // Fetch the blob data
-    const response = await fetch(blobLink);
-    const blobData = await response.blob();
-
-    // Create a new blob from the data and set the filename
-    const blob = new Blob([blobData], { type: blobData.type });
-    const blobWithName = blob as Blob & { name?: string };
-    blobWithName.name = filename;
-
-    // Create a new file from the blob
-    const file = new File([blobWithName], filename, { type: blob.type });
-    console.log(file);
-
-    return file;
-  }
-
   return (
     <>
+    <AlertBox message="Your Resort have registered. Please upload some Images of you resort here..." heading="Upload Images" />
       <Modal
-        open={openImageModal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        openStatus={uploading}
+        closeHandler={null}
+        ModalHeader="Uploading..."
+        closeButton={false}
       >
-        <Box sx={style}>
-          <ImageCrop
-            image={imageWantToBeCropped}
-            handleCroppedImage={handleCroppedImage}
-          />
-        </Box>
+        <button
+          disabled
+          className="relative py-2.5 px-5 mr-2 text-sm font-medium bg-transparent text-black border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none "
+        >
+          {uploadedCount}/{selectedImages.length}{" "}
+          <span className="absolute top-0 right-0 h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-900 opacity-75"></span>
+          </span>
+        </button>
       </Modal>
+      <Modal
+        ModalHeader="Crop image"
+        openStatus={openImageModal}
+        closeHandler={handleClose}
+        closeButton={false}
+      >
+        <ImageCrop
+          image={imageWantToBeCropped}
+          handleCroppedImage={handleCroppedImage}
+        />
+      </Modal>
+
       <div className="h-screen w-full sm:pr-7">
         {/* Alert */}
         {alert.show && (
@@ -359,6 +395,7 @@ const ResortImages = () => {
                     accept="image/*"
                     onChange={imageCropHandler}
                     className="hidden"
+                    disabled={uploading || openImageModal}
                   />
                 </label>
               </div>
@@ -450,13 +487,41 @@ const ResortImages = () => {
             </section>
             {/* sticky footer */}
             <footer className="flex justify-end px-8 pb-8 pt-4">
-              <button
-                id="submit"
-                onClick={uploadHandler}
-                className="rounded-sm px-3 py-1 bg-teal-900 hover:bg-teal-500 text-white focus:shadow-outline focus:outline-none"
-              >
-                Upload now
-              </button>
+              {uploading ? (
+                <button
+                  disabled={uploading}
+                  type="button"
+                  className="py-2.5 px-5 mr-2 text-sm font-medium bg-teal-900 hover:bg-teal-500 text-white rounded border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none inline-flex items-center"
+                >
+                  <svg
+                    aria-hidden="true"
+                    role="status"
+                    className="inline mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
+                    ></path>
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="#1C64F2"
+                    ></path>
+                  </svg>
+                  Uploading...
+                </button>
+              ) : (
+                <button
+                  id="submit"
+                  onClick={uploadHandler}
+                  className="rounded-sm px-3 py-1 bg-teal-900 hover:bg-teal-500 text-white focus:shadow-outline focus:outline-none"
+                >
+                  Upload now
+                </button>
+              )}
+
               <button
                 id="cancel"
                 className="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
@@ -464,6 +529,28 @@ const ResortImages = () => {
               >
                 Clear
               </button>
+
+
+              {/* <button className="border border-teal-900 bg-teal-900 text-white hover:text-teal-900 hover:bg-white rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear">
+                Next
+                <svg
+                  className="h-5 w-5 ml-2 fill-current"
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  x="0px"
+                  y="0px"
+                  viewBox="-49 141 512 512"
+                  xmlSpace="preserve"
+                >
+                  <path
+                    id="XMLID_11_"
+                    d="M-24,422h401.645l-72.822,72.822c-9.763,9.763-9.763,25.592,0,35.355c9.763,9.764,25.593,9.762,35.355,0
+      l115.5-115.5C460.366,409.989,463,403.63,463,397s-2.634-12.989-7.322-17.678l-115.5-115.5c-9.763-9.762-25.593-9.763-35.355,0
+      c-9.763,9.763-9.763,25.592,0,35.355l72.822,72.822H-24c-13.808,0-25,11.193-25,25S-37.808,422-24,422z"
+                  />
+                </svg>
+              </button> */}
             </footer>
           </article>
         </main>

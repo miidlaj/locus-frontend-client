@@ -13,7 +13,7 @@ const AddResort = () => {
     case 0:
       return (
         <>
-          <div className="lg:flex">
+          <div className="lg:flex duration-300">
             <div className="lg:w-1/2 xl:max-w-screen-md">
               <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
                 <h2
@@ -37,13 +37,13 @@ const AddResort = () => {
       );
     case 1:
       return (
-        <div className="pb-20">
+        <div className="pb-20 duration-300">
           <ResortImages />
         </div>
       );
     case 2:
       return (
-        <div className="pb-20">
+        <div className="pb-20 duration-300">
           <MapSelection />
         </div>
       );

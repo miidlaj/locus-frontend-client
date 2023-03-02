@@ -65,7 +65,7 @@ const Address = (props: Props) => {
 
   return (
     <>
-      <div>
+      <div className="duration-300">
         <div className="text-sm font-bold text-gray-700 tracking-wide">
           Zip Code
         </div>

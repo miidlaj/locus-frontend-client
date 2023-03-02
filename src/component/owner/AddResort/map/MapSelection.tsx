@@ -7,6 +7,8 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
+import AlertBox from "../../../common/AlertBox";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoibWlkbGFqIiwiYSI6ImNsZW9qdTJzaTAwOW0zdm5xaDdhaXpxM2QifQ.zBp6eNOrjKgaO4l0SL419Q";
@@ -40,9 +42,16 @@ const MapSelection = () => {
   });
 
 
+  let location = useLocation();
+  const navigate = useNavigate();
+
   const [InputPlace, setInputPlace] = React.useState("");
 
   React.useEffect(() => {
+    if (!location?.state?.success || location?.state?.success === undefined) {
+      navigate("/dashboard/resorts/new/0");
+    }
+
     const bounds = new mapboxgl.LngLatBounds();
     const map = new mapboxgl.Map({
       container: "map",
@@ -106,6 +115,13 @@ const MapSelection = () => {
     setSuggestions([]);
   }
 
+  const navigateToResortPage = () => {
+    navigate("/dashboard/resorts", {
+      state: {
+        success: true,
+        resort: true,
+      }});
+  }
   const submitLocationDetails = () => {
     const locationObj = {
       resortId: "1",
@@ -122,6 +138,8 @@ const MapSelection = () => {
           type: "success",
           show: true,
         });
+        
+        setTimeout(navigateToResortPage, 3000);
       }
     })
     .catch((error) => {
@@ -136,6 +154,10 @@ const MapSelection = () => {
   }
   return (
     <>
+
+<AlertBox message="Add you Resort Location here. Point to maximum inner region. This will be used to filter by location Name." heading="Add Location Details" />
+
+
     {/* Alert */}
     {alert.show && (
           <Collapse in={alert.show} className="pr-10">
@@ -164,10 +186,10 @@ const MapSelection = () => {
           </Collapse>
         )}
 
-      <div className="relative w-[1350px]">
+      <div className="relative w-[1350px] pt-5">
         <div id="map" className="h-screen sm:w-full w-96 border-2 border-teal-900 " />
 
-        <div className="absolute top-3 left-5 z-10 w-full">
+        <div className="absolute top-3 left-5 z-10 w-full pt-3">
           <div className="">
             <div className="w-40 inline-flex flex-col justify-center relative text-white">
               <div className="relative sm:flex">
