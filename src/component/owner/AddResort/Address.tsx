@@ -65,14 +65,14 @@ const Address = (props: Props) => {
 
   return (
     <>
-      <div className="duration-300">
-        <div className="text-sm font-bold text-gray-700 tracking-wide">
+      <div className="">
+        <div className="text-sm font-semibold text-white tracking-wide">
           Zip Code
         </div>
         <input
           className={
-            "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
-            (errors.zipCode ? "focus:border-red-700" : "focus:border-teal-900")
+            "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none " +
+            (errors.zipCode ? "focus:border-red-700" : "focus:border-highlight")
           }
           type="text"
           value={zipCode}
@@ -88,13 +88,13 @@ const Address = (props: Props) => {
         )}
       </div>
       <div className="mt-8">
-        <div className="text-sm font-bold text-gray-700 tracking-wide">
+        <div className="text-sm font-semibold text-white tracking-wide">
           City
         </div>
         <input
           className={
-            "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
-            (errors.city ? "focus:border-red-700" : "focus:border-teal-900")
+            "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none " +
+            (errors.city ? "focus:border-red-700" : "focus:border-highlight")
           }
           type="text"
           value={city}
@@ -111,13 +111,13 @@ const Address = (props: Props) => {
       </div>
 
       <div className="mt-8">
-        <div className="text-sm font-bold text-gray-700 tracking-wide">
+        <div className="text-sm font-semibold text-white tracking-wide ">
           State
         </div>
         <input
           className={
-            "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
-            (errors.state ? "focus:border-red-700" : "focus:border-teal-900")
+            "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none " +
+            (errors.state ? "focus:border-red-700" : "focus:border-highlight")
           }
           type="text"
           value={state}
@@ -133,13 +133,13 @@ const Address = (props: Props) => {
         )}
       </div>
       <div className="mt-8">
-        <div className="text-sm font-bold text-gray-700 tracking-wide">
+        <div className="text-sm font-semibold text-white tracking-wide">
           Country
         </div>
         <input
           className={
-            "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
-            (errors.country ? "focus:border-red-700" : "focus:border-teal-900")
+            "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none " +
+            (errors.country ? "focus:border-red-700" : "focus:border-highlight")
           }
           type="text"
           placeholder="Country"
@@ -160,19 +160,19 @@ const Address = (props: Props) => {
             id="terms"
             aria-describedby="terms"
             type="checkbox"
-            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-teal-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-teal-900 dark:ring-offset-gray-800"
+            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-gray-900 dark:ring-offset-gray-800"
             {...register("terms")}
           />
         </div>
         <div className="ml-3 text-sm">
           <label
             htmlFor="terms"
-            className="font-light text-gray-500 dark:text-gray-500"
+            className="font-light text-white "
           >
             I accept the{" "}
             <Link
               to="/terms"
-              className="font-medium text-teal-800 hover:underline dark:text-teal-800"
+              className="font-medium text-highlight hover:underline"
             >
               Terms and Conditions
             </Link>
@@ -187,7 +187,7 @@ const Address = (props: Props) => {
 
       <div className="mt-10">
       <div className="flex pt-20">
-        <button onClick={prevStep} className="border border-teal-900 text-teal-900 block rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-teal-900 hover:text-white transform transition duration-150 ease-linear">
+        <button onClick={prevStep} className="border border-gray-900 text-gray-900 block rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-gray-900 hover:text-white transform transition duration-150 ease-linear">
           <svg
             className="h-5 w-5 mr-2 fill-current"
             version="1.1"
@@ -206,7 +206,7 @@ const Address = (props: Props) => {
           </svg>
           Prev
         </button>
-        <button onClick={handleSubmit(onSubmit)} disabled={isSubmitting} className="border border-teal-900 bg-teal-900 text-white hover:text-teal-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear">
+        <button onClick={handleSubmit(onSubmit)} disabled={isSubmitting} className="border border-gray-900 bg-gray-900 text-white hover:text-gray-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear">
           Next 
           <svg
             className="h-5 w-5 ml-2 fill-current"

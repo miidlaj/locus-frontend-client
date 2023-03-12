@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 interface PersonalDetailsProps {
   resortName: string;
@@ -25,6 +26,7 @@ const Overview = (props: PersonalDetailsProps) => {
 
   type FormSchemaType = z.infer<typeof formSchema>;
 
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -43,18 +45,18 @@ const Overview = (props: PersonalDetailsProps) => {
   return (
     <>
       <div className="sm:pt-32 duration-300">
-        <div className="text-sm font-bold text-gray-700 tracking-wide">
+        <div className="text-sm font-semibold text-white tracking-wide">
           Resort Name
         </div>
         <input
           className={
-            "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+            "w-full text-lg text-white py-2 border-b bg-transparent placeholder:text-sm border-white focus:outline-none " +
             (errors.resortName
               ? "focus:border-red-700"
-              : "focus:border-teal-900")
+              : "focus:border-highlight")
           }
           type="text"
-          placeholder="..."
+          placeholder="Enter New Resort Name*"
           {...register("resortName")}
           onChange={handleChange}
           value={resortName}
@@ -66,26 +68,13 @@ const Overview = (props: PersonalDetailsProps) => {
         )}
       </div>
       <div className="flex pt-20">
-        <button disabled={true} className="border border-teal-900 text-teal-900 block rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-teal-900 hover:text-white transform transition duration-150 ease-linear">
-          <svg
-            className="h-5 w-5 mr-2 fill-current"
-            version="1.1"
-            id="Layer_1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-            x="0px"
-            y="0px"
-            viewBox="-49 141 512 512"
-            xmlSpace="preserve"
-          >
-            <path
-              id="XMLID_10_"
-              d="M438,372H36.355l72.822-72.822c9.763-9.763,9.763-25.592,0-35.355c-9.763-9.764-25.593-9.762-35.355,0 l-115.5,115.5C-46.366,384.01-49,390.369-49,397s2.634,12.989,7.322,17.678l115.5,115.5c9.763,9.762,25.593,9.763,35.355,0 c9.763-9.763,9.763-25.592,0-35.355L36.355,422H438c13.808,0,25-11.193,25-25S451.808,372,438,372z"
-            />
-          </svg>
-          Prev
+        <button onClick={() => {
+          navigate("/dashboard/resorts")
+        }} className="btn border border-gray-900 bg-transparent text-white  rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-gray-900 hover:text-white transform transition duration-150 ease-linear">
+         
+          Cancel
         </button>
-        <button onClick={handleSubmit(onSubmit)} disabled={isSubmitting} className="border border-teal-900 bg-teal-900 text-white hover:text-teal-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear">
+        <button onClick={handleSubmit(onSubmit)} disabled={isSubmitting} className="btn border border-gray-900 bg-gray-900 text-white hover:text-gray-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear">
           Next 
           <svg
             className="h-5 w-5 ml-2 fill-current"

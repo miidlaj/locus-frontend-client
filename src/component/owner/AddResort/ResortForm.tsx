@@ -104,7 +104,7 @@ const ResortForm = () => {
           navigate("/dashboard/resorts/new/1", {
             state: {
               success: true,
-              resort: response.data,
+              resortId: response.data.resortId,
             },
           });
         }

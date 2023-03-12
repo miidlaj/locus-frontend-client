@@ -3,7 +3,7 @@ import "./ImageUpload.css";
 
 import Modal from "../../../common/Modal";
 
-import Box from "@mui/material/Box";
+
 import ImageCrop from "./ImageCrop";
 import imageCompression from "browser-image-compression";
 import Alert from "@mui/material/Alert";
@@ -12,7 +12,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import ResortImageService from "../../../../services/resort/image.service";
 import { useLocation, useNavigate } from "react-router-dom";
-import AlertBox from "../../../common/AlertBox";
+
 
 const style = {
   position: "absolute" as "absolute",
@@ -43,10 +43,15 @@ const ResortImages = () => {
     if (!location?.state?.success || location?.state?.success === undefined) {
       navigate("/dashboard/resorts/new/0");
     }
+
+    setAlert({
+      message: "Upload Images. Your Resort have registered. Please upload some Images of you resort here...",
+      type: "info",
+      show: true,
+    });
   }, []);
 
-  const resortData = location?.state?.resort;
-  const resortId = resortData?.id;
+  const resortId = location?.state?.resortId;
 
   type alertType = {
     show: boolean;
@@ -163,14 +168,16 @@ const ResortImages = () => {
     }
     setUploading(true);
 
-    selectedImages.forEach(async (image, index) => {
+
+    for (let index = 0; index < selectedImages.length; index++) {
+
       const formData = new FormData();
       console.log(index);
 
-      await fetch(image)
+      await fetch(selectedImages[index])
         .then((response) => response.blob())
         .then(async (blob) => {
-          if (index + 1 === 1) {
+          if ((index + 1) === 1) {
             
             const file = new File([blob], index.toString(), {
               type: blob.type,
@@ -178,6 +185,7 @@ const ResortImages = () => {
             formData.append("image", file);
             formData.append("resortId", resortId);
             await sendDefaultImageRequest(formData);
+            
           } else {
             const file = new File([blob], index.toString(), {
               type: blob.type,
@@ -187,7 +195,7 @@ const ResortImages = () => {
             await ResortImageService.setExtraImage(formData)
               .then(async (response) => {
                 if (response.status === 200) {
-                  setUploadedCount(index + 1); 
+                  setUploadedCount(uploadedCount + 1); 
                 }
               })
               .catch((error) => {
@@ -206,49 +214,36 @@ const ResortImages = () => {
             show: true,
           });
         });
-      //   .then((file) => {
-      //     if (index === 0) {
-      //       formData.append("image", file);
-      //       formData.append("resortId", "1");
-      //       sendDefaultImageRequest(formData);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     setAlert({
-      //       message: error.toString(),
-      //       type: "error",
-      //       show: true,
-      //     });
-      //   });
-    });
-
+      
+    }
     setTimeout(() => {
       console.log("Closing modal...");
       setUploading(false);
-    }, 50000);
+    }, 5000);
     setAlert({
       message: uploadedCount + " Images Uplaoded Successfully",
       type: "success",
       show: true,
     });
 
-    setTimeout(navigateToNextPage , 10000);
+    setTimeout(navigateToNextPage , 3000);
   };
 
   const navigateToNextPage = () => {
     navigate("/dashboard/resorts/new/2", {
       state: {
         success: true,
-        resort: resortId,
+        resortId: resortId,
       }});
   }
+
   
 
   const sendDefaultImageRequest = async (formData: FormData) => {
-    ResortImageService.setDefaultImage(formData)
+    await ResortImageService.setDefaultImage(formData)
       .then((response) => {
         if (response.status === 200) {
-          setUploadedCount(1);
+          setUploadedCount(uploadedCount + 1);
         }
       })
       .catch((error) => {
@@ -272,7 +267,6 @@ const ResortImages = () => {
 
   return (
     <>
-    <AlertBox message="Your Resort have registered. Please upload some Images of you resort here..." heading="Upload Images" />
       <Modal
         openStatus={uploading}
         closeHandler={null}
@@ -281,11 +275,11 @@ const ResortImages = () => {
       >
         <button
           disabled
-          className="relative py-2.5 px-5 mr-2 text-sm font-medium bg-transparent text-black border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none "
+          className="relative py-2.5 px-5 mr-2 text-sm font-medium p-10 bg-transparent text-black border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none "
         >
-          {uploadedCount}/{selectedImages.length}{" "}
+          {uploadedCount}/{selectedImages.length}{" "} Images Uploaded
           <span className="absolute top-0 right-0 h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-900 opacity-75"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-highlight opacity-75"></span>
           </span>
         </button>
       </Modal>
@@ -300,11 +294,9 @@ const ResortImages = () => {
           handleCroppedImage={handleCroppedImage}
         />
       </Modal>
-
-      <div className="h-screen w-full sm:pr-7">
-        {/* Alert */}
-        {alert.show && (
-          <Collapse in={alert.show}>
+      {/* Alert */}
+      {alert.show && (
+          <Collapse in={alert.show} className="relative">
             <Alert
               severity={alert.type}
               action={
@@ -330,11 +322,12 @@ const ResortImages = () => {
           </Collapse>
         )}
 
-        <main className="container h-full">
+        
+        <main className="container h-[90%]">
           {/* file upload modal */}
           <article
             aria-label="File Upload Modal"
-            className="relative h-full flex flex-col bg-white shadow-xl rounded-md"
+            className="relative h-full flex flex-col shadow-xl rounded-md"
           >
             {/* overlay */}
             <div
@@ -357,7 +350,7 @@ const ResortImages = () => {
             {/* scroll area */}
             <section className="h-full overflow-auto p-8 w-full flex flex-col">
               <div className="">
-                <label className="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center bg-white rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                <label className="border-dashed border-2 border-highlight py-12 flex flex-col justify-center items-center bg-gray-900 rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <svg
                       aria-hidden="true"
@@ -375,7 +368,7 @@ const ResortImages = () => {
                       />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400 ">
-                      <span className="font-semibold text-teal-900">
+                      <span className="font-semibold text-white">
                         Click to upload
                       </span>{" "}
                       or drag and drop
@@ -400,7 +393,7 @@ const ResortImages = () => {
                 </label>
               </div>
 
-              <h1 className="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
+              <h1 className="pt-8 pb-3 font-semibold sm:text-lg text-white">
                 To Upload
               </h1>
               <ul id="gallery" className="flex flex-1 flex-wrap -m-1">
@@ -491,7 +484,7 @@ const ResortImages = () => {
                 <button
                   disabled={uploading}
                   type="button"
-                  className="py-2.5 px-5 mr-2 text-sm font-medium bg-teal-900 hover:bg-teal-500 text-white rounded border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none inline-flex items-center"
+                  className="btn py-2.5 px-5 mr-2 text-sm font-medium bg-teal-900 hover:bg-teal-500 text-white rounded border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none inline-flex items-center"
                 >
                   <svg
                     aria-hidden="true"
@@ -524,37 +517,14 @@ const ResortImages = () => {
 
               <button
                 id="cancel"
-                className="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
+                className="btn  ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
                 onClick={clearAllImageHandler}
               >
                 Clear
               </button>
-
-
-              {/* <button className="border border-teal-900 bg-teal-900 text-white hover:text-teal-900 hover:bg-white rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear">
-                Next
-                <svg
-                  className="h-5 w-5 ml-2 fill-current"
-                  id="Layer_1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  x="0px"
-                  y="0px"
-                  viewBox="-49 141 512 512"
-                  xmlSpace="preserve"
-                >
-                  <path
-                    id="XMLID_11_"
-                    d="M-24,422h401.645l-72.822,72.822c-9.763,9.763-9.763,25.592,0,35.355c9.763,9.764,25.593,9.762,35.355,0
-      l115.5-115.5C460.366,409.989,463,403.63,463,397s-2.634-12.989-7.322-17.678l-115.5-115.5c-9.763-9.762-25.593-9.763-35.355,0
-      c-9.763,9.763-9.763,25.592,0,35.355l72.822,72.822H-24c-13.808,0-25,11.193-25,25S-37.808,422-24,422z"
-                  />
-                </svg>
-              </button> */}
             </footer>
           </article>
         </main>
-      </div>
     </>
   );
 };

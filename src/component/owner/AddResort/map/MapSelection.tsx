@@ -7,7 +7,6 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
-import AlertBox from "../../../common/AlertBox";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const MAPBOX_TOKEN =
@@ -45,12 +44,21 @@ const MapSelection = () => {
   let location = useLocation();
   const navigate = useNavigate();
 
+  const resortId = location?.state?.resortId;
+ 
   const [InputPlace, setInputPlace] = React.useState("");
 
   React.useEffect(() => {
-    if (!location?.state?.success || location?.state?.success === undefined) {
+    if (!location?.state?.success || location?.state?.success === undefined ) {
       navigate("/dashboard/resorts/new/0");
     }
+
+    
+    setAlert({
+      message: "Add Location Details. Add you Resort Location here. Point to maximum inner region. This will be used to filter by location Name",
+      type: "info",
+      show: true,
+    });
 
     const bounds = new mapboxgl.LngLatBounds();
     const map = new mapboxgl.Map({
@@ -124,7 +132,7 @@ const MapSelection = () => {
   }
   const submitLocationDetails = () => {
     const locationObj = {
-      resortId: "1",
+      resortId: resortId,
       longitude: selectedPlace.center[0],
       latitude: selectedPlace.center[1],
       location: selectedPlace.place_name      
@@ -155,7 +163,6 @@ const MapSelection = () => {
   return (
     <>
 
-<AlertBox message="Add you Resort Location here. Point to maximum inner region. This will be used to filter by location Name." heading="Add Location Details" />
 
 
     {/* Alert */}
@@ -186,7 +193,7 @@ const MapSelection = () => {
           </Collapse>
         )}
 
-      <div className="relative w-[1350px] pt-5">
+      <div className="relative w-[1350px] pt-5 pr-10">
         <div id="map" className="h-screen sm:w-full w-96 border-2 border-teal-900 " />
 
         <div className="absolute top-3 left-5 z-10 w-full pt-3">

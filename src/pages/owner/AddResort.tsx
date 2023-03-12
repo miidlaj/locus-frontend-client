@@ -13,23 +13,13 @@ const AddResort = () => {
     case 0:
       return (
         <>
-          <div className="lg:flex duration-300">
+          <div className="flex-1 px-2 py-28 sm:px-0lg:flex duration-300 ">
             <div className="lg:w-1/2 xl:max-w-screen-md">
               <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
-                <h2
-                  className="pt-6 text-center text-4xl text-teal-900 font-display font-semibold lg:text-left xl:text-5xl
-                  xl:text-bold"
-                >
-                  New Resort
-                </h2>
-                <div className="mt-12">
+                
+                <div className="mt-12 text-white font-mono">
                   <ResortForm />
                 </div>
-              </div>
-            </div>
-            <div className="hidden lg:flex items-center justify-center bg-white flex-1 h-screen">
-              <div className="max-w-xs transform duration-200 hover:scale-110 cursor-pointer">
-                <img src={image} alt="Resort Form " />
               </div>
             </div>
           </div>
@@ -37,13 +27,13 @@ const AddResort = () => {
       );
     case 1:
       return (
-        <div className="pb-20 duration-300">
+        <div className="duration-300 w-full h-screen">
           <ResortImages />
         </div>
       );
     case 2:
       return (
-        <div className="pb-20 duration-300">
+        <div className="duration-300">
           <MapSelection />
         </div>
       );

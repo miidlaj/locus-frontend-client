@@ -33,10 +33,7 @@ const FacilitySelection = (props: Props) => {
       );
     } else {
       setSelectedChips((prevSelectedChips) => [...prevSelectedChips, facility.id]);
-    }
-    
-    
-    
+    }    
   };
 
   const onPrev = () => {
@@ -47,7 +44,11 @@ const FacilitySelection = (props: Props) => {
 
   const onSubmit = () => {
     facilityHandler(selectedChips);
-    nextStep();
+    if (selectedChips.length === 0) {
+      setErrorMessage("Select atleast one facility!")
+    } else {
+      nextStep();
+    }
   };
 
 
@@ -66,19 +67,19 @@ const FacilitySelection = (props: Props) => {
 
   return (
     <div className="sm:pt-24 duration-300">
-      <div className="text-sm font-bold text-gray-700 tracking-wide">
+      <div className="text-sm font-semibold text-white tracking-wide">
         Facilities
       </div>
 
-      <div className="p-5 border border-teal-900 rounded-lg">
+      <div className="p-5 border border-highlight rounded-lg">
       <div className="flex flex-wrap gap-2">
         {facilities.map((chip) => (
           <div
             key={chip.id}
             className={`hover:scale-105 transform transition duration-150 ease-linear px-2 py-1 rounded-md cursor-pointer ${
               selectedChips.some((selectedChip) => selectedChip === chip.id)
-                ? 'bg-teal-900 text-white'
-                : 'bg-white text-teal-900'
+                ? 'bg-gray-900 text-white'
+                : 'bg-white text-gray-900'
             }`}
             onClick={() => handleChipClick(chip)}
           >
@@ -103,7 +104,7 @@ const FacilitySelection = (props: Props) => {
       <div className="flex pt-20">
         <button
           onClick={onPrev}
-          className="border border-teal-900 text-teal-900 block rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-teal-900 hover:text-white transform transition duration-150 ease-linear"
+          className="border border-gray-900 text-gray-900 block rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-gray-900 hover:text-white transform transition duration-150 ease-linear"
         >
           <svg
             className="h-5 w-5 mr-2 fill-current"
@@ -125,7 +126,7 @@ const FacilitySelection = (props: Props) => {
         </button>
         <button
           onClick={onSubmit}
-          className="border border-teal-900 bg-teal-900 text-white hover:text-teal-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear"
+          className="border border-gray-900 bg-gray-900 text-white hover:text-gray-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear"
         >
           Next
           <svg

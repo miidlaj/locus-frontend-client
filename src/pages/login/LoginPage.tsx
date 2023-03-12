@@ -85,7 +85,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="lg:flex">
+    <div className="lg:flex bg-white">
       <div className="lg:w-1/2 xl:max-w-screen-md">
         <div className="pt-12 bg-gray-100 lg:bg-white flex justify-center lg:justify-start lg:px-12">
           <div className="cursor-pointer flex items-center">
@@ -97,7 +97,7 @@ function LoginPage() {
             </div>
           </div>
         </div>
-        <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
+        <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl ">
           {successRegister && (
             <AlertBox message={successRegister} heading="Registered!" />
           )}
@@ -116,7 +116,7 @@ function LoginPage() {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none bg-white " +
                     (errors.email
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")
@@ -147,7 +147,7 @@ function LoginPage() {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none bg-white " +
                     (errors.password
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")

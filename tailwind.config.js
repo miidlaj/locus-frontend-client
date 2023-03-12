@@ -2,11 +2,20 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
-    // 'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
-  ],
 
-  plugins: [
-      // require('flowbite/plugin')
+  ],
+  theme: {
+    extend: {
+      colors: {
+        "dark-teal": "rgb(1 68 81 / 1)",
+        "light-white": "rgba(255,255,255,0.18)",
+        "highlight": "#38b2ac"
+      }
+    },
+  },
+
+  plugins: [ 
+    require("daisyui"),
   ]
 
 }

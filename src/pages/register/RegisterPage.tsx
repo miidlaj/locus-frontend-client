@@ -98,7 +98,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="lg:flex">
+    <div className="lg:flex bg-white">
       <div className="hidden lg:flex items-center justify-center bg-white flex-1 h-screen">
         <div className="max-w-xs transform duration-200 hover:scale-110 cursor-pointer">
           <LoginSvg />
@@ -135,7 +135,7 @@ const RegisterPage = () => {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none" +
+                    "w-full text-lg py-2 border-b bg-transparent border-gray-300 focus:outline-none bg-white " +
                     (errors.email
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")
@@ -156,7 +156,7 @@ const RegisterPage = () => {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none bg-white " +
                     (errors.name
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")
@@ -178,7 +178,7 @@ const RegisterPage = () => {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none bg-white " +
                     (errors.password
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")
@@ -199,7 +199,7 @@ const RegisterPage = () => {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none bg-white " +
                     (errors.confirmPassword
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")
@@ -220,7 +220,7 @@ const RegisterPage = () => {
                 </div>
                 <input
                   className={
-                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none " +
+                    "w-full text-lg py-2 border-b border-gray-300 focus:outline-none bg-white " +
                     (errors.phone
                       ? "focus:border-red-700"
                       : "focus:border-teal-900")
@@ -241,7 +241,7 @@ const RegisterPage = () => {
                     id="terms"
                     aria-describedby="terms"
                     type="checkbox"
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-teal-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-teal-900 dark:ring-offset-gray-800"
+                    className="w-4 h-4 border border-gray-300 rounded focus:ring-3 focus:ring-teal-300 bg-white "
                     {...register("terms")}
                   />
                 </div>

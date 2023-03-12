@@ -2,7 +2,7 @@ import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Category from "./Category";
-import FormHelperText from "@mui/material/FormHelperText";
+import "./ReactQuill.css";
 
 type Props = {
   categoryId: number;
@@ -54,10 +54,12 @@ const Description = (props: Props) => {
   return (
     <>
       <div className="sm:pt-10 duration-300">
-        <div className="">
-          <div className="text-sm font-bold text-gray-700 tracking-wide">
+        <div >
+        <div className="mt-8 mb-5">
+          <div className=" font-semi-bold text-white tracking-wide">
             Category
           </div>
+        </div>
           <Category
             categoryValidation={categoryValidation}
             categoryId={categoryId}
@@ -65,18 +67,16 @@ const Description = (props: Props) => {
           />
         </div>
 
-        <div className="mt-8">
-          <div className="text-sm font-bold text-gray-700 tracking-wide">
+        <div className="mt-8 mb-5">
+          <div className=" font-semi-bold text-white tracking-wide">
             Description
-            <FormHelperText className="float-right">
-              {remainingChars} / 1024
-            </FormHelperText>
+            <p className="float-right text-white">{remainingChars} / 1024</p>
           </div>
         </div>
         <ReactQuill
           value={description}
           onChange={handleChangee}
-          className="h-40"
+          className="h-40 text-white"
         />
       </div>
 
@@ -91,7 +91,7 @@ const Description = (props: Props) => {
       <div className="flex pt-20">
         <button
           onClick={prevStep}
-          className="border border-teal-900 text-teal-900 block rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-teal-900 hover:text-white transform transition duration-150 ease-linear"
+          className="btn bg-transparent border border-gray-900 text-white rounded-sm font-bold py-2 px-4 mr-2 flex items-center hover:bg-gray-900 hover:text-white transform transition duration-150 ease-linear"
         >
           <svg
             className="h-5 w-5 mr-2 fill-current"
@@ -113,7 +113,7 @@ const Description = (props: Props) => {
         </button>
         <button
           onClick={onSubmit}
-          className="border border-teal-900 bg-teal-900 text-white hover:text-teal-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear"
+          className="border border-gray-900 bg-gray-900 text-white hover:text-gray-900 hover:bg-white block rounded-sm font-bold py-2 px-4 ml-2 flex items-center transform transition duration-150 ease-linear"
         >
           Next
           <svg

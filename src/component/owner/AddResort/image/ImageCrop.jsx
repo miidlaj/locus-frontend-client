@@ -31,7 +31,7 @@ const ImageCrop = ({ image, handleCroppedImage }) => {
           display: image === null ? "none" : "block",
         }}
         onClick={showCroppedImage}
-        className="z-10 cursor-pointer w-full bg-black text-white px-2 h-16 mb-5"
+        className="z-10 cursor-pointer w-full bg-black hover:bg-gray-800 text-white px-2 h-16 mb-5"
       >
         Crop
       </button>
@@ -58,7 +58,7 @@ const ImageCrop = ({ image, handleCroppedImage }) => {
         </div>
 
         <div className="flex justify-center flex-col absolute bottom-0 w-full">
-          <label className="font-bold">
+          <label className="font-bold text-white">
             Zoom
             <Slider
               value={zoom}

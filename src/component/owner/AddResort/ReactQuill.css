@@ -1,0 +1,22 @@
+.ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: #fff;
+}
+
+.ql-toolbar .ql-stroke:hover {
+  fill: none;
+  stroke: rgb(17 24 39);
+}
+
+.ql-toolbar .ql-fill {
+  fill: #fff;
+  stroke: none;
+}
+
+.ql-toolbar .ql-picker {
+  color: #fff;
+}
+
+.ql-toolbar .ql-picker-options {
+  background-color: rgb(17 24 39);
+}

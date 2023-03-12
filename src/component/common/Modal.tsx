@@ -28,12 +28,12 @@ const Modal = (props: Props) => {
       <dialog
         open={openStatus}
         id="myModal"
-        className="z-50 h-auto w-11/12 md:w-1/2 p-5 border top-[10%] bg-slate-50"
+        className="z-50 h-auto w-11/12 md:w-1/2 p-5 border top-[10%] bg-inherit border-none"
       >
         <div className="flex flex-col w-full h-auto ">
           {/* Header */}
           <div className="flex w-full h-auto justify-center items-center">
-            <div className="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold">
+            <div className="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold text-white">
               {ModalHeader}
             </div>
             {closeButton && (
@@ -64,7 +64,6 @@ const Modal = (props: Props) => {
           {/* Modal Content*/}
           <div className="flex w-full h-auto py-10 px-2 justify-center items-center rounded text-center text-gray-500">
             {children}
-
             {warning && <span className="text-amber-400">{warning}</span>}
           </div>
           {/* End of Modal Content*/}
