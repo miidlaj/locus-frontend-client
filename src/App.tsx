@@ -11,7 +11,6 @@ function App() {
           <Routes>
             <Route path='/*'element={<User/>} />
           </Routes>
-
         </div>
     </BrowserRouter>
   );

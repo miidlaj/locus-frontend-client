@@ -79,6 +79,12 @@ const ResortDetails = () => {
     type: "info",
   });
 
+  let initialTab: number = 0;
+  if (location.state?.tabNumber !== undefined){
+    initialTab = location.state?.tabNumber
+  }
+  const [value, setValue] = React.useState(initialTab);
+
   const fetchResortDetails = async () => {
     await resortService
       .getResortById(resortId)
@@ -155,9 +161,10 @@ const ResortDetails = () => {
       navigate("/dashboard/resorts");
     }
     fetchResortDetails();
+    
   }, []);
 
-  const [value, setValue] = React.useState(0);
+  
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

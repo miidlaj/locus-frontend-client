@@ -213,8 +213,8 @@ const MapSelection = () => {
                 <div className="pl-5">
                   {submitButton && (
                     <button
-                      className="bg-white text-teal-900 px-5 py-3 w-auto tracking-wide rounded-sm
-                          font-semibold font-display focus:outline-none focus:shadow-outline transform duration-300 hover:bg-teal-900 hover:text-white 
+                      className="btn bg-teal-900 text-white px-5 py-3 w-auto tracking-wide rounded-sm
+                          font-semibold font-display focus:outline-none focus:shadow-outline transform duration-300 hover:bg-gray-900 hover:text-white 
                           shadow-lg disabled:cursor-not-allowed cursor-pointer " onClick={submitLocationDetails}
                     >
                       Submit

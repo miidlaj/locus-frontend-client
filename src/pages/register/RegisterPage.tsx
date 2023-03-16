@@ -28,7 +28,7 @@ const RegisterPage = () => {
     
   }, [navigate, currentUser]);
 
-  let regName: RegExp = /^[a-zA-Z]+$/;
+  let regName: RegExp = /^[a-zA-Z  ]*$/;
   let regMob: RegExp = /^([+]\d{2})?\d{10}$/;
   const formSchema = z
     .object({
@@ -81,10 +81,10 @@ const RegisterPage = () => {
     console.log(user);
 
     AuthenticationService.register(user)
-      .then((_) => {
+      .then((response) => {
         navigate("/login",{ state: {
           success: true,
-          message: "Kindly check you registered email for activating your Account."
+          message: response.data
         }});
       })
       .catch((error) => {
@@ -117,7 +117,7 @@ const RegisterPage = () => {
         </div>
         <div className="px-12 pt-6 sm:px-24 md:px-48 lg:px-12 lg:mt-0 xl:px-24 xl:max-w-2xl">
           {errorMessage && 
-          <AlertBox message={errorMessage} heading="Oops!" />
+          <AlertBox success={false} message={errorMessage}  />
           }
 
           <h2

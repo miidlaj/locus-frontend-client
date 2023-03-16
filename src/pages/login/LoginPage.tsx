@@ -11,16 +11,36 @@ import { RootState, AppDispatch } from "../../store";
 import AuthenticationService from "../../services/authentication.service";
 import { useDispatch } from "react-redux/es/exports";
 import { setCurrentUser } from "../../store/actions/user";
-import AlertBox from "../../component/common/AlertBox";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, GOOGLE_AUTH_URL } from "../../common/Constants";
+import {
+  FACEBOOK_AUTH_URL,
+  GITHUB_AUTH_URL,
+  GOOGLE_AUTH_URL,
+} from "../../common/Constants";
+
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import Collapse from "@mui/material/Collapse";
+import CloseIcon from "@mui/icons-material/Close";
+import ForgetPassword from "../../component/login/ForgetPassword";
 
 function LoginPage() {
   const [user, setUser] = useState(new User("", "", "", "", "", ""));
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successRegister, setSuccessRegister] = useState("");
+
+  type alertType = {
+    show: boolean;
+    message: string;
+    type: "warning" | "info" | "error" | "success";
+  };
+  const [alert, setAlert] = React.useState<alertType>({
+    show: false,
+    message: "",
+    type: "info",
+  });
+
+  const [forgetPassModal, setForgetPassModal] = React.useState(false);
 
   const { state } = useLocation();
 
@@ -48,12 +68,13 @@ function LoginPage() {
     resolver: zodResolver(formSchema),
   });
 
-  
   useEffect(() => {
-    if (state?.success) {
-      setSuccessRegister(state?.message);
-    } else if (state?.success === false) {
-      setErrorMessage(state?.message);
+    if (state?.success !== undefined) {
+      setAlert({
+        message: state.message,
+        type: state.success ? "success" : "error",
+        show: true,
+      });
     }
 
     if (currentUser?.jwtToken) {
@@ -62,7 +83,11 @@ function LoginPage() {
   }, []);
 
   const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
-    setSuccessRegister("");
+    setAlert({
+      message: "",
+      type: "info",
+      show: false,
+    });
     user.email = data.email;
     user.password = data.password;
 
@@ -74,16 +99,31 @@ function LoginPage() {
       })
       .catch((error) => {
         console.log(error);
+        let message = "";
         if (error?.response?.status === 423) {
-          setErrorMessage("Bad Credintials");
-        } else if (error?.response?.status === 406){
-          setErrorMessage("Your Account is disabled!");
+          message = "Bad Credintials!";
+        } else if (error?.response?.status === 406) {
+          message = "Your Account is disabled!";
         } else {
-          setErrorMessage("Unexpected error occurred.");
+          message = "Unexpected error occurred.";
         }
+        setAlert({
+          message: message,
+          type: "warning",
+          show: true,
+        });
       });
   };
 
+
+  const handleSuccessForForget = (message: string) => {
+    setForgetPassModal(false);
+    setAlert({
+      message: message,
+      show: true,
+      type: "success"
+    });
+  }
   return (
     <div className="lg:flex bg-white">
       <div className="lg:w-1/2 xl:max-w-screen-md">
@@ -98,10 +138,34 @@ function LoginPage() {
           </div>
         </div>
         <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl ">
-          {successRegister && (
-            <AlertBox message={successRegister} heading="Registered!" />
+          {/* Alert */}
+          {alert.show && (
+            <Collapse in={alert.show} className="relative mt-5">
+              <Alert
+                severity={alert.type}
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color={alert.type}
+                    size="small"
+                    onClick={() => {
+                      setAlert({
+                        message: "",
+                        show: false,
+                        type: "info",
+                      });
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+              >
+                {alert.message}
+              </Alert>
+            </Collapse>
           )}
-          {errorMessage && <AlertBox message={errorMessage} heading="Oops!" />}
+
           <h2
             className="pt-6 text-center text-4xl text-teal-900 font-display font-semibold lg:text-left xl:text-5xl
               xl:text-bold"
@@ -137,12 +201,14 @@ function LoginPage() {
                     Password
                   </div>
                   <div>
-                    <Link
-                      to="/forgot-password"
+                    <p
+                      onClick={() => {
+                        setForgetPassModal(true);
+                      }}
                       className="text-xs font-display font-semibold text-teal-900 hover:text-gray-500 cursor-pointer"
                     >
                       Forgot Password?
-                    </Link>
+                    </p>
                   </div>
                 </div>
                 <input
@@ -173,9 +239,12 @@ function LoginPage() {
             </div>
 
             <div className="flex items-center justify-center space-x-4 mt-3">
-              <a href={GITHUB_AUTH_URL} className="flex items-center py-2 px-4 text-sm uppercase rounded bg-white hover:bg-gray-100 text-teal-900 border border-transparent hover:border-transparent hover:text-gray-700 shadow-md hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
+              <a
+                href={GITHUB_AUTH_URL}
+                className="flex items-center py-2 px-4 text-sm uppercase rounded bg-white hover:bg-gray-100 text-teal-900 border border-transparent hover:border-transparent hover:text-gray-700 shadow-md hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+              >
                 <svg
-                className="w-6 h-6 mr-3"
+                  className="w-6 h-6 mr-3"
                   enableBackground="new 0 0 512 512"
                   height="512px"
                   id="Layer_1"
@@ -197,7 +266,10 @@ function LoginPage() {
                 </svg>
                 Github
               </a>
-              <a href={GOOGLE_AUTH_URL} className="flex items-center py-2 px-4 text-sm uppercase rounded bg-white hover:bg-gray-100 text-teal-900 border border-transparent hover:border-transparent hover:text-gray-700 shadow-md hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
+              <a
+                href={GOOGLE_AUTH_URL}
+                className="flex items-center py-2 px-4 text-sm uppercase rounded bg-white hover:bg-gray-100 text-teal-900 border border-transparent hover:border-transparent hover:text-gray-700 shadow-md hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+              >
                 <img
                   src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
                   className="w-6 h-6 mr-3"
@@ -206,7 +278,10 @@ function LoginPage() {
                 Google
               </a>
 
-              <a href={FACEBOOK_AUTH_URL} className="flex items-center py-2 px-4 text-sm uppercase rounded bg-white hover:bg-gray-100 text-teal-900 border border-transparent hover:border-transparent hover:text-gray-700 shadow-md hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
+              <a
+                href={FACEBOOK_AUTH_URL}
+                className="flex items-center py-2 px-4 text-sm uppercase rounded bg-white hover:bg-gray-100 text-teal-900 border border-transparent hover:border-transparent hover:text-gray-700 shadow-md hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+              >
                 <img
                   src="https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"
                   className="w-6 h-6 mr-3"
@@ -231,6 +306,22 @@ function LoginPage() {
       <div className="hidden lg:flex items-center justify-center bg-white flex-1 h-screen">
         <div className="max-w-xs transform duration-200 hover:scale-110 cursor-pointer">
           <LoginSvg />
+        </div>
+      </div>
+
+      {/* Put this part before </body> tag */}
+      <input
+        type="checkbox"
+        checked={forgetPassModal}
+        id="my-modal-5"
+        className="modal-toggle"
+      />
+      <div className="modal bg-opacity-50">
+        <div className="modal-box w-11/12 max-w-5xl bg-white">
+          <h3 className="font-bold text-lg text-teal-900">Reset Password!</h3>
+
+          <ForgetPassword handleSuccessForForget={handleSuccessForForget} setForgetPassModal={setForgetPassModal}/>
+
         </div>
       </div>
     </div>

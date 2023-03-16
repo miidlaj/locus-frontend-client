@@ -5,13 +5,16 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
+import roomService from "../../../../../services/resort/room/room.service";
+import Button from '@mui/material/Button';
+import { useNavigate } from "react-router-dom";
+
 
 interface Props {
-  resortId: number
+  resortId: number;
 }
 const ResortRooms = (props: Props) => {
-
-  const {resortId} = props
+  const { resortId } = props;
 
   const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -25,7 +28,34 @@ const ResortRooms = (props: Props) => {
     message: "",
     type: "info",
   });
-  
+
+  type RoomType = {
+    roomId: number;
+    roomCode: string;
+    enabled: boolean;
+    roomPrice: number;
+    updatedTime: number;
+    roomType: string;
+  };
+  const [rooms, setRooms] = React.useState<RoomType[]>([]);
+
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    roomService
+      .getAllRoomByResortId(resortId)
+      .then((response) => {
+        setRooms(response.data);
+      })
+      .catch((error) => {
+        setAlert({
+          message: error.response.data,
+          show: true,
+          type: "error",
+        });
+      });
+  }, [modalOpen]);
+
   return (
     <>
       <div className="flex-1 px-2 sm:px-0 min-h-screen">
@@ -127,25 +157,50 @@ const ResortRooms = (props: Props) => {
             </p>
           </div>
 
-          <div className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover">
-            <img
-              className="w-20 h-20 object-cover object-center rounded-full"
-              src="https://images.unsplash.com/photo-1547592180-85f173990554?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-              alt="cuisine"
-            />
-            <h4 className="text-white text-2xl font-bold capitalize text-center">
-              A1
-            </h4>
-            <p className="text-white/50">55 members</p>
-            <p className="absolute top-2 text-white/20 inline-flex items-center text-xs">
-              Booked{" "}
-              <span className="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span>
-            </p>
-          </div>
+          {rooms.map((room, index) => (
+            <div
+              key={index}
+              className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover"
+            >
+              <h4 className="text-white text-2xl font-bold capitalize text-center">
+                {room.roomCode}
+                &nbsp;
+              </h4>
+              <div className="badge badge-outline badge-ghost">
+                {room.roomType}
+              </div>
+              <div className="card-actions justify-end absolute bottom-2">
+                <div className="badge badge-info badge-ghost">
+                  Price:&nbsp;{room.roomPrice}&nbsp;INR
+                </div>
+              </div>
+
+              <Button variant="text" onClick={()=> {
+                navigate("/dashboard/resorts/roomDetails" ,{
+                  state: {
+                    resortId: resortId,
+                    roomId: room.roomId,
+                  }
+                })
+              }}>View</Button>
+              <p className="absolute top-2 text-white/20 inline-flex items-center text-xs">
+                {room.enabled ? "Enabled" : "Disabled"}&nbsp;
+                {room.enabled ? (
+                  <span className="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span>
+                ) : (
+                  <span className="ml-2 w-2 h-2 block bg-red-500 rounded-full group-hover:animate-pulse"></span>
+                )}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
-      <RoomModalForm modalStatus={modalOpen} resortId={resortId} setModalStatus={setModalOpen}/>
+      <RoomModalForm
+        modalStatus={modalOpen}
+        resortId={resortId}
+        setModalStatus={setModalOpen}
+      />
     </>
   );
 };

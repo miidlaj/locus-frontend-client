@@ -484,7 +484,7 @@ const ResortImages = () => {
                 <button
                   disabled={uploading}
                   type="button"
-                  className="btn py-2.5 px-5 mr-2 text-sm font-medium bg-teal-900 hover:bg-teal-500 text-white rounded border border-gray-200 focus:z-10 focus:ring-4 focus:outline-none inline-flex items-center"
+                  className="rounded-sm px-3 py-1 bg-teal-900 hover:bg-gray-900 text-white focus:shadow-outline focus:outline-none"
                 >
                   <svg
                     aria-hidden="true"
@@ -503,13 +503,13 @@ const ResortImages = () => {
                       fill="#1C64F2"
                     ></path>
                   </svg>
-                  Uploading...
+                  Uploading
                 </button>
               ) : (
                 <button
                   id="submit"
                   onClick={uploadHandler}
-                  className="rounded-sm px-3 py-1 bg-teal-900 hover:bg-teal-500 text-white focus:shadow-outline focus:outline-none"
+                  className="rounded-sm px-3 py-1 bg-teal-900 hover:bg-gray-900 text-white focus:shadow-outline focus:outline-none"
                 >
                   Upload now
                 </button>
@@ -517,7 +517,7 @@ const ResortImages = () => {
 
               <button
                 id="cancel"
-                className="btn  ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
+                className="btn  ml-3 rounded-sm px-3 py-1 hover:bg-teal-900 text-white bg-gray-900 focus:shadow-outline focus:outline-none"
                 onClick={clearAllImageHandler}
               >
                 Clear

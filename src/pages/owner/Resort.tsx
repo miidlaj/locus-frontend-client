@@ -7,9 +7,9 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
-import { ResortStatusType } from "../../component/owner/resort/ResortStatusType";
 import formatDate from "../../services/common.service";
 import noImage from  "../../assests/noImage.jpg"
+import { ResortStatusType } from "../../component/owner/resort/ResortStatusType";
 
 const Resort = () => {
   const location = useLocation();

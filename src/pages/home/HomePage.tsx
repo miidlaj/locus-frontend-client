@@ -5,7 +5,7 @@ const HomePage = () => {
 
 
   return (
-   <div>
+   <div className="bg-white">
     <HomeNav/>
    </div>
   )

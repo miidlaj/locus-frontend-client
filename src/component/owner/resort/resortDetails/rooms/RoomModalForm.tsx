@@ -52,6 +52,18 @@ const RoomModalForm = (props: Props) => {
     }
   );
 
+  const clearRoomValues = () => {
+    reset();
+    setRoomFormValues( {
+      roomCode: "",
+      description: "",
+      facilityIds: [],
+      roomTypeId: 0,
+      price: 0,
+      resortId: resortId,
+    })
+  }
+
   type AddRoomStepsProps = {
     step: number;
   };
@@ -187,16 +199,27 @@ const RoomModalForm = (props: Props) => {
       
       await roomService.createNewRoom(roomFormValues)
       .then((response) => {
-        navigate("/dashboard/resorts/room/details")
-
+        if (response.status === 200) {
+          clearRoomValues();
+          setModalStatus(false);
+        }
       }).catch((error) => {
-        console.log(error.response);
-        setAlert({
-          btnName:"retry",
-          buttonHandler: validateHandler,
-          show: true,
-          message: error.response
-        });
+        if (error.response.status === 409) {
+          setAlert({
+            btnName:"Change",
+            buttonHandler: () => {setStep(0)},
+            show: true,
+            message: error.response.data
+          });
+        } else {
+          setAlert({
+            btnName:"Retry",
+            buttonHandler: validateHandler,
+            show: true,
+            message: "Unexpected error occurred!"
+          });
+        }
+        
       })
     }
   }
@@ -223,6 +246,7 @@ const RoomModalForm = (props: Props) => {
       const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
       } = useForm<FormSchemaType>({
         resolver: zodResolver(detailsSchema),
@@ -324,7 +348,11 @@ const RoomModalForm = (props: Props) => {
               <button
                   className="btn btn-md bg-white/75 text-gray-900 hover:bg-gray-900 hover:text-white/75"
                   disabled={isSubmitting}
-                  onClick={() => {setModalStatus(false)}}
+                  onClick={() => {
+                    clearRoomValues();
+                    setModalStatus(false)
+                    
+                  }}
                 >
                   Cancel
                 </button>
