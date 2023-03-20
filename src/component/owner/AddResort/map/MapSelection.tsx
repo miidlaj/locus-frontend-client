@@ -52,8 +52,6 @@ const MapSelection = () => {
     if (!location?.state?.success || location?.state?.success === undefined ) {
       navigate("/dashboard/resorts/new/0");
     }
-
-    
     setAlert({
       message: "Add Location Details. Add you Resort Location here. Point to maximum inner region. This will be used to filter by location Name",
       type: "info",
@@ -79,6 +77,11 @@ const MapSelection = () => {
   const addToMap = (map: mapboxgl.Map, cordinates: [number, number]) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const marker = new mapboxgl.Marker().setLngLat(cordinates).addTo(map);
+
+    
+
+   
+    
   };
 
   const addBoundsToMap = (map: mapboxgl.Map, bounds: mapboxgl.LngLatBounds) => {

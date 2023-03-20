@@ -2,13 +2,14 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom';
 import LoginPage from '../pages/login/LoginPage';
 import RegisterPage from '../pages/register/RegisterPage';
-import HomePage from '../pages/home/HomePage';
 import OAuthRedirectHandler from '../component/login/OAuthRedirectHandler';
 import NotFoundPage from '../pages/error/NotFoundPage';
 import UnauthorizedPage from '../pages/error/UnauthorizedPage';
 import Owner from './Owner';
 import VerificationPage from '../pages/user/VerificationPage';
 import PasswordResetPage from '../pages/user/PasswordResetPage';
+import SearchPage from '../pages/user/SearchPage';
+import HomePage from '../pages/home/HomePage';
 
 
 const User = () => {
@@ -18,7 +19,7 @@ const User = () => {
             <Route path='/register' element={<RegisterPage/>}/>
             <Route path='/verify' element={<VerificationPage/>}/>
             <Route path='/forget' element={<PasswordResetPage/>}/>
-            <Route path='/' element={<HomePage/>}/>
+            <Route path='/*' element={<HomePage/>}/>
             <Route path='/oauth2/redirect' element={<OAuthRedirectHandler/>}/>
 
             <Route path='/dashboard/*' element={<Owner/>} />
