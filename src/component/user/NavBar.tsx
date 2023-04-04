@@ -1,11 +1,13 @@
 import React, { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import { Email, DashboardCustomize } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
+
+import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 interface NavItemProps {
@@ -40,9 +42,9 @@ const NavItem: React.FC<NavItemProps> = ({ to, Icon, label }) => {
 
 const NavBar = () => {
   const Menus = [
-    { title: "Dashboard", icon: <DashboardCustomize />, link: "/dashboard" },
-    { title: "Resort", icon: <ApartmentIcon />, link: "/dashboard/resorts" },
-    { title: "Message", icon: <Email />, link: "/dashboard/message" },
+    { title: "Home", icon: <HomeIcon />, link: "/" },
+    { title: "Search", icon: <SearchIcon />, link: "/search" },
+    { title: "Favourites", icon: <FavoriteIcon />, link: "/favourites" },
   ];
 
   const Controlls = [

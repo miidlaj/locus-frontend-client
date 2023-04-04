@@ -8,8 +8,8 @@ import UnauthorizedPage from '../pages/error/UnauthorizedPage';
 import Owner from './Owner';
 import VerificationPage from '../pages/user/VerificationPage';
 import PasswordResetPage from '../pages/user/PasswordResetPage';
-import SearchPage from '../pages/user/SearchPage';
 import HomePage from '../pages/home/HomePage';
+import LogoutPage from '../pages/home/LogoutPage';
 
 
 const User = () => {
@@ -23,6 +23,8 @@ const User = () => {
             <Route path='/oauth2/redirect' element={<OAuthRedirectHandler/>}/>
 
             <Route path='/dashboard/*' element={<Owner/>} />
+
+            <Route path='/logout' element={<LogoutPage/>}/>
 
             <Route path='/404'element={<NotFoundPage/>} />
             <Route path='/401'element={<UnauthorizedPage/>} />

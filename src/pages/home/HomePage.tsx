@@ -1,7 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import HomeNav from "../../component/common/HomeNav";
 import SearchPage from "../user/SearchPage";
-import NavBar from "../../component/user/NavBard";
+import NavBar from "../../component/user/NavBar";
+import ResortDetailsPage from "../user/ResortDetailsPage";
+import CheckRoomsPage from "../user/CheckRoomsPage";
+import CheckOutPage from "../user/CheckOutPage";
+import BookingPage from "../user/BookingPage";
 
 const HomePage = () => {
   return (
@@ -10,6 +14,11 @@ const HomePage = () => {
         <NavBar />
         <Routes>
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/resort/view" element={<ResortDetailsPage/>} />
+          <Route path="/resort/rooms" element={<CheckRoomsPage/>} />
+          <Route path="/checkout" element={<CheckOutPage/>} />
+          <Route path="/bookings" element={<BookingPage/>} />
+
         </Routes>
       </div>
       {/* <BottomAppBar/> */}

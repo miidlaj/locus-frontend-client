@@ -6,6 +6,7 @@ import AddResort from "../pages/owner/AddResort";
 import DashNav from "../component/owner/Nav/DashNav";
 import ResortDetails from "../pages/owner/ResortDetails";
 import RoomDetails from "../pages/owner/RoomDetails";
+import WalletPage from "../pages/owner/WalletPage";
 
 const Owner = () => {
   return (
@@ -23,6 +24,8 @@ const Owner = () => {
               <Route path="/profile" element={<DashBoardPage />} />
               <Route path="/notification" element={<DashBoardPage />} />
               <Route path="/message" element={<DashBoardPage />} />
+              <Route path="/wallet" element={<WalletPage/>} />
+
             </Routes>
           </div>
           {/* <BottomAppBar/> */}

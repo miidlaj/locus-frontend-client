@@ -29,10 +29,14 @@ import catergoryService from "../../../services/resort/catergory.service";
 import facilityService from "../../../services/resort/facility.service";
 
 import Slide from "@mui/material/Slide";
-import { log } from "console";
 
 
-const SearchComponent = () => {
+interface Props {
+    handleResult: (a: any) => void;
+}
+const SearchComponent = (props: Props) => {
+
+    const {handleResult} = props;
   //   function formatDate(date: Date): string {
   //     const dd = String(date.getDate()).padStart(2, "0");
   //     const mm = String(date.getMonth() + 1).padStart(2, "0"); // January is 0!
@@ -54,9 +58,11 @@ const SearchComponent = () => {
   const [selectedPlace, setSelectedPlace] = React.useState('');
   const [selectedCategories, setSelectedCategories] = React.useState<typeof categories>([]);
   const [selectedFacilities, setSelectedFacilities] = React.useState<typeof facilities>([]);
-  const [searchResult, setSearchResult] = React.useState([]);
 
-  React.useEffect(() => {
+  const [expanded, setExpanded] = React.useState(false);
+
+
+  React.useEffect(() => {    
     if (categories.length === 0) {
       console.log("Sending request...");
 
@@ -103,6 +109,7 @@ const SearchComponent = () => {
 
   const validateAndSearch = () => {
     if (selectedPlace.length !== 0) {
+        setExpanded(false);
         const selectedCategoryIds = selectedCategories.map(c => c.id);
         const selectedFacilityIds = selectedFacilities.map(f => f.id);
         const obj = {
@@ -112,12 +119,12 @@ const SearchComponent = () => {
         }
         resortSearchService.getResortWithFilter(obj)
         .then((response) => {
-            setSearchResult(response.data);
+            handleResult(response.data);
         }).catch((error) => {
-            
+            console.log(error);
         });
-        console.log(obj);
     }
+
   }
 
   const handleCategoryChange = (event: React.SyntheticEvent, newValue: typeof categories) => {
@@ -128,7 +135,6 @@ const SearchComponent = () => {
     setSelectedFacilities(newValue);
   };
 
-  const [expanded, setExpanded] = React.useState(false);
 
   return (
     <>
@@ -191,7 +197,8 @@ const SearchComponent = () => {
 
         <div className="flex items-center justify-center flex-wrap sm:w-[80%] mx-auto ">
           <Accordion
-            onChange={() => setExpanded(!expanded)}
+            expanded={expanded}
+            
             sx={{
               width: "100%",
               background: "transparent",
@@ -226,6 +233,7 @@ const SearchComponent = () => {
                 >
                   <InputBase
                   value={selectedPlace}
+                  onClick={() => setExpanded(!expanded)}
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Search Location"
                     inputProps={{ "aria-label": "search maps" }}
@@ -285,7 +293,7 @@ const SearchComponent = () => {
                 )}
               </div>
             </AccordionSummary>
-            <Slide direction="up" in={expanded} mountOnEnter unmountOnExit>
+            <Slide direction="up" in={expanded}  >
               <AccordionDetails
                 className="flex items-center justify-center flex-wrap"
                 
@@ -312,6 +320,7 @@ const SearchComponent = () => {
                           <TextField
                             color="primary"
                             {...params}
+                            value={selectedCategories}
                             label="Category"
                             placeholder=""
                           />

@@ -9,8 +9,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoibWlkbGFqIiwiYSI6ImNsZW9qdTJzaTAwOW0zdm5xaDdhaXpxM2QifQ.zBp6eNOrjKgaO4l0SL419Q";
+const MAPBOX_TOKEN = "pk.eyJ1IjoibWlkbGFqIiwiYSI6ImNsZW9qdTJzaTAwOW0zdm5xaDdhaXpxM2QifQ.zBp6eNOrjKgaO4l0SL419Q";
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 const MapSelection = () => {
@@ -45,11 +44,14 @@ const MapSelection = () => {
   const navigate = useNavigate();
 
   const resortId = location?.state?.resortId;
+
+  console.log(resortId);
+  
  
   const [InputPlace, setInputPlace] = React.useState("");
 
   React.useEffect(() => {
-    if (!location?.state?.success || location?.state?.success === undefined ) {
+    if (!location?.state?.success || location?.state?.resortId === undefined ) {
       navigate("/dashboard/resorts/new/0");
     }
     setAlert({
@@ -72,15 +74,11 @@ const MapSelection = () => {
       addBoundsToMap(map, bounds);
       setSubmitButton(true);
     }
-  }, [selectedPlace]);
+  }, [location?.state?.success, navigate, selectedPlace]);
 
   const addToMap = (map: mapboxgl.Map, cordinates: [number, number]) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const marker = new mapboxgl.Marker().setLngLat(cordinates).addTo(map);
-
-    
-
-   
     
   };
 
@@ -165,9 +163,7 @@ const MapSelection = () => {
   }
   return (
     <>
-
-
-
+    
     {/* Alert */}
     {alert.show && (
           <Collapse in={alert.show} className="pr-10">
@@ -197,7 +193,7 @@ const MapSelection = () => {
         )}
 
       <div className="relative w-[1350px] pt-5 pr-10">
-        <div id="map" className="h-screen sm:w-full w-96 border-2 border-teal-900 " />
+        <div id="map" className="h-screen sm:w-full w-1/2 border-2 border-teal-900 " />
 
         <div className="absolute top-3 left-5 z-10 w-full pt-3">
           <div className="">
